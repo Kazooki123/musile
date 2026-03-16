@@ -4,7 +4,8 @@ Made with **Supabase**, it's a **beta**, on-development website game where the h
 
 Players (also known as the **guessers**) have to guess the song after 5 seconds of hearing the music, there are points, ranks and leaderboards to see who can guess more correctly :>
 
-> ![NOTE]
+>![IMPORTANT]
+
 > For `.flac` files, make sure they're not above +50MB or even +20MB is enough due to Supabase's limitations on blob storage, for now Musile uploads the song locally and plays it using fetch. But later as the project grew I'll add it to make it upload to Supabase storage (I recommend to use a .mp3 file for now)
 
 ## Setup
