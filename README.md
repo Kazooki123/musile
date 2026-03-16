@@ -1,0 +1,48 @@
+# Musile - A Music Guesser Multiplayer Game
+
+Made with **Supabase**, it's a **beta**, on-development website game where the host has to upload a song (.mp3/.m4a/.ogg/.flac, etc) and input the song's title, album title, and the artist's name into it.
+
+Players (also known as the **guessers**) have to guess the song after 5 seconds of hearing the music, there are points, ranks and leaderboards to see who can guess more correctly :>
+
+> ![NOTE]
+> For `.flac` files, make sure they're not above +50MB or even +20MB is enough due to Supabase's limitations on blob storage, for now Musile uploads the song locally and plays it using fetch. But later as the project grew I'll add it to make it upload to Supabase storage (I recommend to use a .mp3 file for now)
+
+## Setup
+
+Prerequisites:
+
+- Bun.js
+- Supabase project (if you want to test this and report a bug or error)
+- A Supabase CLI (if again you want to help the project)
+
+Run:
+
+```bash
+bun run build
+```
+
+Then:
+
+```bash
+bun run preview
+```
+
+OR
+
+```bash
+bun run dev
+```
+
+API required (for beta testers or contributors):
+
+```bash
+VITE_SUPABASE_URL=XXXXXXXXXXXXXXXXXXXXXX
+VITE_SUPABASE_ANON_KEY=XXXXXXXXXXXXXXXXXXXXXX
+SUPABASE_DB_PASSWORD=XXXXXXXXX <- Optional though 
+```
+
+## LICENSE
+
+This project is under the license of **GNU AGPL (Affero General Public License)**
+
+That's all it :3 Thank you for your support!!!
