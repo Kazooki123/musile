@@ -41,7 +41,7 @@ VITE_SUPABASE_ANON_KEY=XXXXXXXXXXXXXXXXXXXXXX
 SUPABASE_DB_PASSWORD=XXXXXXXXX <- Optional though 
 ```
 
-**Bu- but Star! How am I supposed to make the SQL in the Supabase SQL Editor to setup the tables!?**
+**"Bu- but Star! How am I supposed to make the SQL in the Supabase SQL Editor to setup the tables!?"**
 
 Here:
 
