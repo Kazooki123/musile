@@ -1,5 +1,7 @@
 # Musile - A Music Guesser Multiplayer Game
 
+[![Made with Supabase](https://supabase.com/badge-made-with-supabase-dark.svg)](https://supabase.com)
+
 Made with **Supabase**, it's a **beta**, on-development website game where the host has to upload a song (.mp3/.m4a/.ogg/.flac, etc) and input the song's title, album title, and the artist's name into it.
 
 Players (also known as the **guessers**) have to guess the song after 5 seconds of hearing the music, there are points, ranks and leaderboards to see who can guess more correctly :>
