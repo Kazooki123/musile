@@ -98,7 +98,8 @@
      
      try {
        const fileExt = file.name.split('.').pop() || 'mp3';
-       const fileName = `\( {crypto.randomUUID()}. \){fileExt}`;
+       const uuid = crypto.randomUUID();
+       const fileName = `${uuid}.${fileExt}`;
 
        const { data, error } = await supabase.storage
         .from('songs')
