@@ -90,6 +90,22 @@ CREATE TABLE public.guesses (
 CREATE INDEX idx_rooms_room_code ON rooms(room_code);
 CREATE INDEX idx_players_room_id ON players(room_id);
 CREATE INDEX idx_guesses_room_id ON guesses(room_id);
+
+-- RLS
+CREATE POLICY "Rooms are readable by anyone" ON public.rooms
+  FOR SELECT USING (true);
+CREATE POLICY "Players are readable by anyone" ON public.players
+  FOR SELECT USING (true);
+CREATE POLICY "Guesses are readable by anyone" ON public.guesses
+  FOR SELECT USING (true);
+CREATE POLICY "Anyone can insert rooms" ON public.rooms
+  FOR INSERT WITH CHECK (true);
+CREATE POLICY "Anyone can insert players" ON public.players
+  FOR INSERT WITH CHECK (true);
+CREATE POLICY "Anyone can insert guesses" ON public.guesses
+  FOR INSERT WITH CHECK (true);
+CREATE POLICY "Host can update their room" ON public.rooms
+  FOR UPDATE USING (host_id = current_user_id()) WITH CHECK (host_id = current_user_id());
 ```
 
 ## LICENSE
