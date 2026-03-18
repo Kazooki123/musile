@@ -9,6 +9,8 @@ node_modules
 /supabase
 /supabase.exe
 /build
+/static/uploads
+/dump
 
 # OS
 .DS_Store

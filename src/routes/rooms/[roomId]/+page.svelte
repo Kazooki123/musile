@@ -4,6 +4,7 @@
    import { page } from '$app/stores';
    import { roomState, isHost, userId } from '$lib/stores';
    import type { Song, Guess } from '$lib/types';
+   import { supabase } from '$lib/supabaseClient';
    
    const roomCode = $page.params.roomId;
    
@@ -39,6 +40,7 @@
          guesses: [],
          started: data.started,
          playTime: data.playTime,
+         song_file_path: data.song_file_path,
        };
        
        $isHost = data.hostId === $userId;
@@ -78,6 +80,7 @@
          })),
          started: roomData.started,
          playTime: roomData.playTime,
+         song_file_path: roomData.song_file_path
        };
      } catch (err) {
        console.error('Error polling room:', err);
@@ -89,40 +92,49 @@
    });
    
    async function uploadSong() {
-     if (!file || !roomId) return;
+     if (!file || uploading) return;
      
      uploading = true;
-     const formData = new FormData();
-     formData.append('audio', file);
      
      try {
-       const res = await fetch(`/api/upload`, { method: 'POST', body: formData });
-       if (!res.ok) {
-         alert('Upload Failed!');
-         return;
-       }
-       
-       const { filename } = await res.json();
-       uploadedFileName = filename;
-       
-       // Update room with song
-       const updateRes = await fetch(`/api/rooms/${roomId}/game`, {
-         method: 'PATCH',
-         headers: { 'Content-Type': 'application/json' },
-         body: JSON.stringify({
-           songTitle: song.title,
-           songAlbum: song.album,
-           songArtist: song.artist,
-           songFile: filename,
-         }),
-       });
-       
-       if (updateRes.ok) {
-         await pollRoomData();
-       }
+       const fileExt = file.name.split('.').pop() || 'mp3';
+       const fileName = `\( {crypto.randomUUID()}. \){fileExt}`;
+
+       const { data, error } = await supabase.storage
+        .from('songs')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false,
+          contentType: file.type
+        });
+
+       if (error) throw error;
+
+       const { data: urlData } = supabase.storage
+        .from('songs')
+        .getPublicUrl(fileName);
+
+       const publicUrl = urlData.publicUrl;
+
+       const { error: dbError } = await supabase
+        .from('rooms')
+        .update({
+          song_file_path: fileName,
+          song_title: song.title,
+          song_album: song.album,
+          song_artist: song.artist,
+          play_time_seconds: Math.floor(Math.random() * 6) + 5
+        })
+        .eq('code', roomId);
+
+       if (dbError) throw dbError;
+
+       console.log('Songs uploaded & saved:', publicUrl);
+
+       // playAudioPreview(publicUrl);
      } catch (e) {
-       alert('Error uploading file');
-       console.error(e);
+       alert('Error uploading file!');
+       console.error('Upload Failed!', e);
      } finally {
        uploading = false;
      }
@@ -148,18 +160,21 @@
    }
    
    function playAudio(playTime: number) {
-     if (!$roomState?.song) return;
+     if (!$roomState?.song_file_path) return;
      
-     const audioUrl = `/api/audio/${roomId}/${$roomState.song.file}`;
-     isAudioPlaying = true;
-     audioElement = new Audio(audioUrl);
-     audioElement.play().catch(err => console.error('Playback error:', err));
+     const { data } = supabase.storage
+      .from('songs')
+      .getPublicUrl($roomState.song_file_path);
+
+     const audioUrl = data.publicUrl;
+
+     const audio = new Audio(audioUrl);
+     audio.play().catch(e => console.error('Audio play failed:', e));
+     
      
      setTimeout(() => {
-       if (audioElement) {
-         audioElement.pause();
-         isAudioPlaying = false;
-       }
+       audio.pause();
+       audio.currentTime = 0;
      }, playTime * 1000);
    }
    

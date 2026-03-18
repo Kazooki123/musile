@@ -20,4 +20,5 @@ export interface RoomState {
   guesses: Guess[];
   started: boolean;
   playTime: number;
+  song_file_path: string;
 }
