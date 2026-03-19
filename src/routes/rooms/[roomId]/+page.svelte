@@ -144,7 +144,7 @@
           song_title: song.title,
           song_album: song.album,
           song_artist: song.artist,
-          play_time_seconds: Math.floor(Math.random() * 6) + 5,
+          play_time: Math.floor(Math.random() * 6) + 5,
         })
         .eq('code', roomCode);
 
